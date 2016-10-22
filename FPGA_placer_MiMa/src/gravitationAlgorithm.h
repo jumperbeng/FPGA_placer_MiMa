@@ -9,18 +9,13 @@
 #define GRAVITATIONALGORITHM_H_
 
 #include "main.h"
-#define gFactor 0.9
+#include "global.h"
 
-extern vector<vector<int> > siteMap;
-extern vector<vector<bool> > validMap;
-extern vector<vector<int> > ABUMap;
-extern vector<Net> netRecords;
-extern vector<Cell> cellRecords;
-extern int totalNetNumber;
-extern int totalCellNumber;
-
-void moveByForce();
+double diffusion();
+int moveByForce();
 void update();
-void relocate(int& x,int& y,int x_prev,int y_prev,int type);
+bool relocate(int& x,int& y,int x_prev,int y_prev,int type);
+
+extern clock_t tStart;
 
 #endif /* GRAVITATIONALGORITHM_H_ */

@@ -8,10 +8,8 @@
 #ifndef NET_H_
 #define NET_H_
 #include "main.h"
+#include "global.h"
 
-extern vector<vector<int> > siteMap;
-extern vector<vector<bool> > validMap;
-extern vector<vector<int> > ABUMap;
 
 class Net {
 public:

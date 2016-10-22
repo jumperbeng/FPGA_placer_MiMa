@@ -68,11 +68,11 @@ int Net::getYMax(){
 }
 
 int Net::getXCenter(){
-	return (xMax+xMin)/2;
+	return (xMax+xMin)/2.0;
 }
 
 int Net::getYCenter(){
-	return (yMax+yMin)/2;
+	return (yMax+yMin)/2.0;
 }
 
 bool Net::isModified(){

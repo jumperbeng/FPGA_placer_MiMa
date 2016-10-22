@@ -8,10 +8,7 @@
 #ifndef CELL_H_
 #define CELL_H_
 #include "main.h"
-
-extern vector<vector<int> > siteMap;
-extern vector<vector<bool> > validMap;
-extern vector<vector<int> > ABUMap;
+#include "global.h"
 
 class Cell {
 public:

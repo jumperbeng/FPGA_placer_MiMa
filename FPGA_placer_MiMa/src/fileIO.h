@@ -10,21 +10,15 @@
 using namespace std;
 
 #include "main.h"
-class Cell;
-class Net;
+#include "global.h"
 
-extern vector<vector<int> > siteMap;
-extern vector<vector<bool> > validMap;
-extern vector<vector<int> > ABUMap;
-extern vector<Net> netRecords;
-extern vector<Cell> cellRecords;
-extern int totalNetNumber;
-extern int totalCellNumber;
 
 void readSitemap(const char* file);
 void readPl(const char* file);
 void readNets(const char* file);
 
 void writePl(const char* file);
+void writeABU(const char* file);
+void writeSite(const char* file);
 
 #endif /* FILEIO_H_ */

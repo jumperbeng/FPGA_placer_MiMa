@@ -8,20 +8,12 @@
 #ifndef COMMONALGORITHM_H_
 #define COMMONALGORITHM_H_
 
-#define CROWDED 0.9
-
 #include "main.h"
-
-extern vector<vector<int> > siteMap;
-extern vector<vector<bool> > validMap;
-extern vector<vector<int> > ABUMap;
-extern vector<Net> netRecords;
-extern vector<Cell> cellRecords;
-extern int totalNetNumber;
-extern int totalCellNumber;
+#include "global.h"
 
 void updateABU();
 void updateABU(int x_prev, int y_prev, int x_next, int y_next);
+double calculateABU10();
 bool isCrowded(int x,int y);
 
 

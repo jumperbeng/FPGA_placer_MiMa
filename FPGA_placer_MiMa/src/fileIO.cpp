@@ -8,7 +8,6 @@
 #include "fileIO.h"
 
 void readSitemap(const char* file){
-
 	ifstream inFile(file);
 	string line;
 	int siteWidth,siteHeight;
@@ -30,16 +29,10 @@ void readSitemap(const char* file){
 	siteWidth=atoi(siteWidth_temp.c_str());
 	siteHeight=atoi(siteHeight_temp.c_str());
 
-	siteMap.resize(siteWidth);
-	validMap.resize(siteWidth);
+	site.initial(siteWidth,siteHeight);
 	ABUMap.resize(ceil(siteWidth/6.0));
-
-	for (int h = 0; h < siteWidth; h++) {
-		siteMap[h].resize(siteHeight);
-		validMap[h].resize(siteHeight,true);
-	}
 	for (int h = 0; h < ceil(siteWidth/6.0); h++){
-		ABUMap[h].resize(ceil(siteHeight/6.0),0);
+		ABUMap[h].resize(ceil(siteHeight/6.0));
 	}
 
 	while(!inFile.eof()){
@@ -50,24 +43,23 @@ void readSitemap(const char* file){
 		stringin >> cellType_temp;
 		x=atoi(x_temp.c_str());
 		y=atoi(y_temp.c_str());
-		if(!strcmp(cellType_temp.c_str(),"INVALID"))
+		if(!strcmp(cellType_temp.c_str(),"INVALID")){
 			cellType=INVALID;
-		else if(!strcmp(cellType_temp.c_str(),"CLB"))
+		}else if(!strcmp(cellType_temp.c_str(),"CLB")){
 			cellType=CLB;
-		else if(!strcmp(cellType_temp.c_str(),"IO"))
+		}else if(!strcmp(cellType_temp.c_str(),"IO")){
 			cellType=IO;
-		else if(!strcmp(cellType_temp.c_str(),"DSP"))
+		}else if(!strcmp(cellType_temp.c_str(),"DSP")){
 			cellType=DSP;
-		else if(!strcmp(cellType_temp.c_str(),"RAM"))
+		}else if(!strcmp(cellType_temp.c_str(),"RAM")){
 			cellType=RAM;
-		siteMap[x][y]=cellType;
+		}
+		site.setType(x,y,cellType);
 	}
 	inFile.close();
-	updateABU();
 }
 
 void readPl(const char* file){
-
 	ifstream inFile(file);
 	string line;
 	int cellIndex, x, y, cellType;
@@ -87,21 +79,23 @@ void readPl(const char* file){
 			x=atoi(x_temp.c_str());
 			y=atoi(y_temp.c_str());
 
-			if(!strcmp(cellType_temp.c_str(),"CLB"))
+			if(!strcmp(cellType_temp.c_str(),"CLB")){
 				cellType=CLB;
-			else if(!strcmp(cellType_temp.c_str(),"IO"))
+			}else if(!strcmp(cellType_temp.c_str(),"IO")){
 				cellType=IO;
-			else if(!strcmp(cellType_temp.c_str(),"DSP"))
+			}else if(!strcmp(cellType_temp.c_str(),"DSP")){
 				cellType=DSP;
-			else if(!strcmp(cellType_temp.c_str(),"RAM"))
+			}else if(!strcmp(cellType_temp.c_str(),"RAM")){
 				cellType=RAM;
+			}
 
 			if(cellFM_temp=='F')
 				cellFM=FIXED;
 			else if(cellFM_temp=='M')
 				cellFM=MOVED;
 
-			validMap[x][y] = false;
+			site.setValid(x,y,false);
+			site.insertCell(x,y,cellIndex);
 			Cell tempCell(cellIndex, x, y, cellType, cellFM);
 			cellRecords.push_back(tempCell);
 		}
@@ -169,6 +163,59 @@ void writePl(const char* file){
 					break;
 			}
 			outfile << "cell_"<<cellRecords[i].getIndex()<<" "<<type<<" "<<cellRecords[i].getX()<<" "<<cellRecords[i].getY()<<" "<<fm<<endl;
+		}
+	}
+	outfile.close();
+}
+
+void writeABU(const char* file){
+	ofstream outfile;
+	char str[80];
+	strcpy (str,file);
+	outfile.open (strcat (str,".counts"));
+	if(outfile.is_open()){
+		for(int j=0;j<ABUMap[0].size();j++){//jth row
+			for(int i=0;i<ABUMap.size();i++)//ith column
+				outfile<<(ABUMap[i][j].density)<<'\t';
+				//outfile<<(ABUMap[i][j].density>CROWDED)<<'\t';
+			outfile<<endl;
+		}
+	}
+	outfile.close();
+
+	strcpy (str,file);
+	outfile.open (strcat (str,".x"));
+	if(outfile.is_open()){
+		for(int j=0;j<ABUMap[0].size();j++){//jth row
+			for(int i=0;i<ABUMap.size();i++)//ith column
+				outfile<<ABUMap[i][j].xStep<<'\t';
+			outfile<<endl;
+		}
+	}
+	outfile.close();
+	strcpy (str,file);
+	outfile.open (strcat (str,".y"));
+	if(outfile.is_open()){
+		for(int j=0;j<ABUMap[0].size();j++){//jth row
+			for(int i=0;i<ABUMap.size();i++)//ith column
+				outfile<<ABUMap[i][j].yStep<<'\t';
+			outfile<<endl;
+			}
+	}
+	outfile.close();
+
+}
+
+void writeSite(const char* file){
+	ofstream outfile;
+	char str[80];
+	strcpy (str,file);
+	outfile.open (strcat (str,".site"));
+	if(outfile.is_open()){
+		for(int j=0;j<site.getHeight();j++){//jth row
+			for(int i=0;i<site.getWidth();i++)//ith column
+				outfile<<(!site.getValid(i,j))<<'\t';
+		outfile<<endl;
 		}
 	}
 	outfile.close();

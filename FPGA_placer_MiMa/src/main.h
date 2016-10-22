@@ -21,11 +21,17 @@ using namespace std;
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include <vector>
 
-#include "Cell.h"
-#include "Net.h"
+#include "global.h"
+
 #include "fileIO.h"
+
+#include "Cell.h"
+#include "Map.h"
+#include "Net.h"
+
 #include "commonAlgorithm.h"
 #include "gravitationAlgorithm.h"
 
@@ -33,5 +39,6 @@ using namespace std;
 enum type {INVALID, CLB, DSP, RAM, IO};
 enum FM {FIXED, MOVED};
 
+extern clock_t tStart;
 
 #endif /* MAIN_H_ */
